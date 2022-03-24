@@ -1,0 +1,66 @@
+import cv2
+import numpy as np
+
+#open video
+source = cv2.VideoCapture('MakoUvideo.mp4')
+
+while True:
+    ret, img = source.read()
+   
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    blurImg = cv2.blur(gray, (2,2))
+    edges = cv2.Canny(blurImg, 30, 70, apertureSize=3)
+    cv2.imshow('edges', edges)
+    lines = cv2.HoughLines(edges, 1, np.pi / 195, 200)
+    height, width, channels = img.shape
+
+#line location and slope
+    for line in lines:
+        rho,theta = line[0]
+        a = np.cos(theta)
+        b = np.sin(theta)
+        x0 = a * rho
+        y0 = b * rho
+        x1 = int(x0 + 1500 * (-b))
+        y1 = int(y0 + 1500 * (a))
+        x2 = int(x0 - 0 * (-b))
+        y2 = int(y0 - 0 * (a))
+        if x2-x1==0:
+            slope=0
+        else:
+            slope=(y2-y1)/(x2-x1)
+        #print(slope)
+        if slope >-0.000001 and slope <0.000001:
+            if width-1450>x1>435:
+                cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
+                print(slope)
+        if slope >-0.000001 and slope <0.000001:
+            if width-1290>x1>550:
+                cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
+                print(slope)
+        if slope >-0.000001 and slope <0.000001:
+            if width-1090>x1>800:
+                cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
+                print(slope)        
+        if slope >-0.000001 and slope <0.000001:
+            if width-880>x1>1000:
+                cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
+                print(slope)
+        if slope >-0.000001 and slope <0.000001:
+            if width-690>x1>1185:
+                cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
+                print(slope)     
+        if slope >-0.000001 and slope <0.000001:
+            if width-510>x1>1330:
+                cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
+                print(slope)
+        if slope >-0.000001 and slope <0.000001:
+            if width-320>x1>1500:
+                cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
+                print(slope) 
+
+    cv2.imshow('HoughTest', img)
+    key = cv2.waitKey(1)
+    if key == ord("q"):
+        break
+cv2.destroyAllWindows()
